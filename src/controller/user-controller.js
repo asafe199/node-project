@@ -1,5 +1,5 @@
 const repository = require('../repository/user-repository');
-
+const mongoose = require('mongoose')
 exports.get = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -60,7 +60,8 @@ exports.post = async (req, res) => {
             data: "User created successfully"
         });
     } catch (e) {
-        res.status(500).send({
+        let err = e instanceof mongoose.Error.ValidationError;
+        res.status(err ? 400 : 500).send({
             data: e
         });
     }

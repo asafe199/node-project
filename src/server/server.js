@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config({ path: process.cwd() + '\\src\\.env' });
 require('./mongo-connection').initMongo();
+const PATH_CONTEXT = '/api';
 
 const USER_ROUTES = require('../routes/user-routes');
 const AUTH_ROUTES = require('../routes/autenticate-routes');
@@ -11,8 +12,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.enable('trust proxy');
 
-app.use("/user", USER_ROUTES);
-app.use("/autenticate", AUTH_ROUTES);
+app.use(`${PATH_CONTEXT}/user`, USER_ROUTES);
+app.use(`${PATH_CONTEXT}/autenticate`, AUTH_ROUTES);
 
 app.use((req, res, next) => {
     const err = new Error('Resource not found');

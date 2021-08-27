@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 
 module.exports.encode = async (data) => {
-    return await jwt.sign(data, process.env.SECRET_KEY, {expiresIn: 300});
+    let token = await jwt.sign(data, process.env.SECRET_KEY, {expiresIn: 5000});
+    return "Bearer " + token;
 }
 
 module.exports.verify = (token) => {
@@ -14,13 +15,15 @@ module.exports.decode = async (token) => {
 
 module.exports.isAuthenticate = async (req, res, next) => {
     let authorization = req.headers['authorization'];
+    let bearer = authorization?.includes("Bearer ");
     try {
-        if(authorization){
-            this.verify(authorization);
+        if(bearer){
+            let data = authorization?.replace("Bearer ", "");
+            this.verify(data.trim());
             next();
         } else {
             res.status(401).send({
-                data: "Token is Mandatory"
+                data: "Bearer Token is Mandatory"
             });
         }
     } catch (e){
