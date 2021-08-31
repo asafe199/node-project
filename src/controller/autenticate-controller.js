@@ -33,19 +33,17 @@ module.exports.refreshToken = async (req, res, next) => {
 }
 
 async function buildToken(data, res) {
-    let tokenEncode = await token.encode({
+    let userModel = {
         id: data.id,
         name: data.name,
         email: data.email,
         roles: data.roles
-    });
+    };
+    let tokenEncode = await token.encode(userModel);
     res.status(200).send({
-        data: {
-            token: tokenEncode,
-            user: {
-                id: data.id,
-                email: data.email
-            }
+        "data": {
+            "token": tokenEncode,
+            "data": userModel
         }
     })
 }

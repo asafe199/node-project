@@ -4,6 +4,7 @@ const repository = require("../controller/autenticate-controller")
 
 app.use(async function timer(req, res, next) {
     console.log(`Req : ${req.originalUrl}, Time:${new Date()}`);
+    next();
 });
 
 app.post("/login", repository.login)
